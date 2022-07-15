@@ -315,3 +315,24 @@ function sum(input){
      } // repeat_category_familiarity
     return repeat_trial
    }
+
+   // Save data to file functions
+   function save_server_data(name, data) {
+     var xhr = new XMLHttpRequest();
+     //xhr.addEventListener("load", onComplete);
+     xhr.open('POST', 'Tools/write_data.php'); // 'write_data.php' is the path to the php file described above.
+     xhr.setRequestHeader('Content-Type', 'application/json');
+     xhr.send(JSON.stringify({
+       filename: name,
+       filedata: data
+     }));
+   }
+
+   function save_local_data(name, data){
+      var a         = document.createElement('a');
+      a.href        = 'data:attachment/csv,' +  encodeURIComponent(data);
+      a.target      = '_blank';
+      a.download    = name;
+      document.body.appendChild(a);
+      a.click();
+   }
