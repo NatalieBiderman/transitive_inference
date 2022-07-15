@@ -23,9 +23,7 @@
   <script>
 
 // TODO:
-// add quiz qs
-// create git page
-// test exp
+// change consent form
 
 // =============================================================================
 // PRE LOAD TASK IMAGES
@@ -63,7 +61,7 @@ var end_node                       = 7; // how many letters we are covering
 var n_blocks_training              = 3;
 var n_blocks_test                  = n_reps_per_trial_type_test; // we keep number of blocks similar to number of trial types, so each block will present all trial types in a randomized order
 var n_total_blocks                 = n_blocks_training + n_blocks_test;
-var timing_S1                      = 500;
+var timing_S1                      = 250;
 var timing_S2                      = timing_S1;
 var timing_ISI                     = 2000;
 var timing_max_response            = 3000;
@@ -72,13 +70,13 @@ var timing_too_slow                = 1000;
 var timing_time_out                = 2000;
 var timing_ITI                     = 1000;
 var timing_max_self_initiation     = 2000;
-var max_earnings                   = 4; // maximum dollar earnings
+var max_earnings                   = 10; // maximum dollar earnings
 var keys_instructions              = [' '];
 var keys_start_exp                 = [' '];
 var keys_decisions                 = ['d', 'k']
 var timeline                       = [];
 var decisions_timeline             = { timeline: []};
-var is_self_initiation             = 0; // do we want participants to self initiate their trials
+var is_self_initiation             = 1; // do we want participants to self initiate their trials
 var is_keys_instructions           = 0; // do we want to explicitly instruct subjects about the correspondance of keys and responses
 var stim_path                      = "Stimuli/Fractals_stims";
 
@@ -288,6 +286,17 @@ decisions_timeline.timeline.push(repeat_instructions,passed_instructions);
 
 for (t = 0; t < ti_trials.length; t++){
 
+  // ---------------------------------- ITI ------------------------------------
+
+  var ITI_trial = {
+    type: 'html-keyboard-response',
+    stimulus: '<div style="font-size: 300%">+</div>', // blank screen
+    choices: jsPsych.NO_KEYS,
+    data: {ttype: 'ITI',
+           index: t},
+    trial_duration: timing_ITI
+  }
+
   // ---------------------------- Self initiation ------------------------------
 
   var initiation_trial = {
@@ -490,16 +499,7 @@ for (t = 0; t < ti_trials.length; t++){
         } // conditional function
       } //
 
-  // ---------------------------------- ISI ------------------------------------
 
-  var ITI_trial = {
-    type: 'html-keyboard-response',
-    stimulus: '<div style="font-size: 300%">+</div>', // blank screen
-    choices: jsPsych.NO_KEYS,
-    data: {ttype: 'ITI',
-           index: t},
-    trial_duration: timing_ITI
-  }
   // ------------------------------ Block over ---------------------------------
 
   // present block over text
@@ -548,12 +548,12 @@ if (is_self_initiation == 1){
 
   // if we want to apply self initiation we would need to repeat the trial again in case of no response
   var repeat_ti_trial = {
-    timeline: [initiation_trial, if_initiation_too_slow, S1_trial, ISI_trial, S2_trial, response_trial, if_feedback, if_too_slow, if_time_out, ITI_trial, if_block_over],
+    timeline: [ITI_trial, initiation_trial, if_initiation_too_slow, S1_trial, ISI_trial, S2_trial, response_trial, if_feedback, if_too_slow, if_time_out, if_block_over],
     loop_function: function(){
-      if (isNaN(jsPsych.data.get().filter({category: 'deliberation'}).last(1).values()[0].left_chosen)){
-        return true;
-      } else {
+      if (jsPsych.data.get().filter({ttype: 'self_initiation'}).last(1).values()[0].key_press){
         return false;
+      } else {
+        return true;
       } // else
     } // loop_function function
   } // repeat_deliberation_trial
