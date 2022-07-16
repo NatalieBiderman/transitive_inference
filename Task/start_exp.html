@@ -646,11 +646,11 @@ timeline.push(decisions_timeline);
     },
     on_finish: function() {
       if (is_server == 1) {
-        save_server_data('Data/Individual_data/data_sub_' + subID, jsPsych.data.get().ignore('stimulus').csv());
-        save_server_data('Data/Interactive_data/int_data_sub_' + subID, jsPsych.data.getInteractionData().csv())
+        save_server_data('Individual_data/data_sub_' + subID, jsPsych.data.get().ignore('stimulus').csv());
+        save_server_data('Interactive_data/int_data_sub_' + subID, jsPsych.data.getInteractionData().csv())
       } else {
-        save_local_data('Data/Individual_data/data_sub_' + subID + '.csv',jsPsych.data.get().ignore('stimulus').csv());
-        save_local_data('Data/Interactive_data/int_data_sub_' + subID, '.csv', jsPsych.data.getInteractionData().csv())
+        save_local_data('Individual_data/data_sub_' + subID + '.csv',jsPsych.data.get().ignore('stimulus').csv());
+        save_local_data('Interactive_data/int_data_sub_' + subID, '.csv', jsPsych.data.getInteractionData().csv())
       } // else
     } // on_finish
   });
