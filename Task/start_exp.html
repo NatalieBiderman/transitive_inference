@@ -205,15 +205,20 @@ var single_stim = '<table class="table"><tr>\
 var fullscreen = {
   type: 'fullscreen',
   fullscreen_mode: true,
+  message: '<p>Welcome to our study!<br>' +
+           'Our study requires your undivided attention throughout the entire experiment.</br>'+
+           'Please note that exiting full screen mode, responding randomly, or responding to fewer than 90% of trials will cause your HIT to be rejected.<br></br>'+
+            'To switch to full screen and start the experiment, please press the button below.</p>',
   on_finish: function(){
     // add columns to data
     jsPsych.data.addProperties({
       warning: 0,
       missed_checkup: 0,
-      PID: subID })
+      PID: subID }) // generate a random 5-char ID, because we can't save MTurk worker id.
   }, // function on_finish
-  data: {ttype: 'full_screen', start_time: timeStamp()}
+  data: {category: 'full_screen', start_time: timeStamp()}
 }
+timeline.push(fullscreen)
 
 // ------------------------------ Instructions ---------------------------------
 
