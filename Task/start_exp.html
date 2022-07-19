@@ -306,7 +306,8 @@ for (t = 0; t < ti_trials.length; t++){
   var ITI_trial = {
     type: 'html-keyboard-response',
     stimulus: '<div style="font-size: 300%">+</div>', // blank screen
-    choices: jsPsych.NO_KEYS,
+    choices: keys_decisions,
+    response_ends_trial: false,
     data: {ttype: 'ITI',
            index: t},
     trial_duration: timing_ITI
@@ -549,7 +550,7 @@ for (t = 0; t < ti_trials.length; t++){
       conditional_function: function(){
         var curr_ind = jsPsych.data.get().filter({ttype: 'response'}).last(1).values()[0].index;
         // if this is not the last trial
-        if (curr_ind != ti_trials.length) {
+        if (curr_ind != (ti_trials.length-1)) {
           // if so, check if the current block will change from the block in the next trial
             if (ti_trials[curr_ind].block != ti_trials[curr_ind+1].block){
               return true;
