@@ -86,6 +86,7 @@ if (is_debug==1){
   n_reps_per_trial_type_test = 2;
   timing_ISI = 100;
   timing_max_response = 500;
+  timing_feedback = 100;
   timing_time_out = 100;
   timing_ITI = 500;
 }
@@ -595,6 +596,7 @@ if (is_self_initiation == 1){
   } // repeat_deliberation_trial
 
   decisions_timeline.timeline.push(repeat_ti_trial);
+  //decisions_timeline.timeline.push(repeat_ti_trial);
 
   } else {
     decisions_timeline.timeline.push(S1_trial, ISI_trial, S2_trial, response_trial, if_feedback, if_too_slow, if_time_out, ITI_trial, if_block_over)
@@ -647,8 +649,6 @@ timeline.push(decisions_timeline);
       }
       bonus = bonus.toFixed(2);
       jsPsych.data.get().addToLast({total_bonus_tally: bonus});
-
-    var extra_reward = 'Congratulations! Your extra earnings in the second part of the experiment are $' + given_reward;
       return '<p>Thank you for participating in this study!<br></br>' +
              'Congratulations! You made extra $' + bonus + 'in the study<br></br>' +
              'Your survey code is: ' + subID + '<br></br>' +
@@ -673,7 +673,7 @@ timeline.push(decisions_timeline);
   jsPsych.init({
     timeline: timeline,
     preload_images: task_images,
-    show_progress_bar: true, // should i include this?
+    //show_progress_bar: true,
     exclusions: {min_width: 1000,
                 min_height: 700},
     on_interaction_data_update: function(data){
