@@ -55,6 +55,7 @@ task_images = TI_stimuli.concat(Instructions_stimuli).concat(Extra_stims);
 // PARAMETERS
 // =============================================================================
 
+var is_debug                       = 1;
 var n_reps_per_trial_type_training = 10;
 var n_reps_per_trial_type_test     = 6; // 6 or 7
 var end_node                       = 7; // how many letters we are covering
@@ -79,6 +80,15 @@ var decisions_timeline             = { timeline: []};
 var is_self_initiation             = 0; // do we want participants to self initiate their trials
 var is_keys_instructions           = 0; // do we want to explicitly instruct subjects about the correspondance of keys and responses
 var stim_path                      = "Stimuli/Fractals_stims";
+
+if (is_debug==1){
+  n_reps_per_trial_type_training = 2;
+  n_reps_per_trial_type_test = 2;
+  timing_ISI = 100;
+  timing_max_response = 500;
+  timing_time_out = 100;
+  timing_ITI = 500;
+}
 
 // assign subject id
 var subID = Math.floor(Math.random() * 90000) + 10000; // random 5-digit number
@@ -512,8 +522,8 @@ for (t = 0; t < ti_trials.length; t++){
       type: 'html-keyboard-response',
       data: {ttype: 'block_over',
              index: t},
-      stimulus: "The current block is over</br></br>"+
-                "You have earned extra &#36;{0} in the previous block</br></br>"+
+      stimulus: "Round {0} out of {1} is over.</br></br>"+
+                "You have earned extra &#36;{2} in the previous block</br></br>"+
                 "When you are ready to start the next block, please press the space bar",
       choices: keys_start_exp,
       response_ends_trial: true,
@@ -527,7 +537,10 @@ for (t = 0; t < ti_trials.length; t++){
         block_bonus = max_earnings/n_total_blocks;
       }
       block_bonus = block_bonus.toFixed(2);
-      trial.stimulus = String.format(trial.stimulus, block_bonus);
+
+      // current block
+      block = jsPsych.data.get().filter({ttype: 'response'}).last(1).values()[0].block;
+      trial.stimulus = String.format(trial.stimulus, block, n_total_blocks, block_bonus);
     }
   }
 
