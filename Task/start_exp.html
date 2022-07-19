@@ -306,11 +306,16 @@ for (t = 0; t < ti_trials.length; t++){
   var ITI_trial = {
     type: 'html-keyboard-response',
     stimulus: '<div style="font-size: 300%">+</div>', // blank screen
-    choices: keys_decisions,
+    //choices: keys_decisions,
     response_ends_trial: false,
     data: {ttype: 'ITI',
            index: t},
-    trial_duration: timing_ITI
+    trial_duration: timing_ITI,
+    on_finish: function(data){
+      if (data.key_press) {
+        data.keypress_iti = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      }
+    }
   }
 
   // ---------------------------- Self initiation ------------------------------
@@ -369,10 +374,16 @@ for (t = 0; t < ti_trials.length; t++){
   var ISI_trial = {
     type: 'html-keyboard-response',
     stimulus: '<div style="font-size: 300%">+</div>', // fixation
-    choices: jsPsych.NO_KEYS,
+    response_ends_trial: false,
+    //choices: jsPsych.NO_KEYS,
     data: {ttype: 'ISI',
            index: t},
-    trial_duration: timing_ISI
+    trial_duration: timing_ISI,
+    on_finish: function(data){
+      if (data.key_press) {
+        data.keypress_isi = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      }
+    }
   }
 
   // ----------------------------------- S2 ------------------------------------
@@ -382,10 +393,16 @@ for (t = 0; t < ti_trials.length; t++){
     data: {ttype: 'S2',
            index: t},
     stimulus: single_stim,
-    choices: jsPsych.NO_KEYS,
+    response_ends_trial: false,
+    //choices: jsPsych.NO_KEYS,
     trial_duration: timing_S2,
     on_start: function(trial){
-    trial.stimulus = String.format(trial.stimulus, ti_trials[trial.data.index].S2_img_path);
+      trial.stimulus = String.format(trial.stimulus, ti_trials[trial.data.index].S2_img_path);
+    },
+    on_finish: function(data){
+      if (data.key_press) {
+        data.keypress_S2 = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      }
     }
   }
 
