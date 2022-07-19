@@ -56,6 +56,7 @@ task_images = TI_stimuli.concat(Instructions_stimuli).concat(Extra_stims);
 // =============================================================================
 
 var is_debug                       = 1;
+var is_server                      = 1;
 var n_reps_per_trial_type_training = 10;
 var n_reps_per_trial_type_test     = 6; // 6 or 7
 var end_node                       = 7; // how many letters we are covering
@@ -649,19 +650,19 @@ timeline.push(decisions_timeline);
       }
       bonus = bonus.toFixed(2);
       jsPsych.data.get().addToLast({total_bonus_tally: bonus});
-      return '<p>Thank you for participating in this study!<br></br>' +
-             'Congratulations! You made extra $' + bonus + 'in the study<br></br>' +
-             'Your survey code is: ' + subID + '<br></br>' +
+      return '<p>Thank you for participating in this study!<br>' +
+             'Congratulations! You made extra $' + bonus + ' in the study<br>' +
+             'Your survey code is: ' + subID + '<br>' +
              'In order to receive payment, you must provide the above code on the survey link page on mturk.<br></br>'+
-             'Once you press the space bar, your results will be uploaded to the server, and the experiment will complete.<br></br>'+
-             'This may take several minutes - do not refresh or close your browser during this time.<br></br>'+
-             'After your results will be uploaded the screen will turn grey, and you may submit your code.<br></br>'+
+             'Once you press the space bar, your results will be uploaded to the server, and the experiment will complete.<br>'+
+             'This may take several minutes - do not refresh or close your browser during this time.<br>'+
+             'After your results will be uploaded the screen will turn grey, and you may submit your code.<br>'+
              'Press the space bar to complete this experiment.</p>'
     },
     choices: [' '],
     data: {category: 'final_tally'}},
   { type: 'html-keyboard-response',
-    stimulus: '<p>Data uploading... The screen will turn grey when all data are uploaded.<br></br>When that happens, you may close the window and submit your code</p>',
+    stimulus: '<p>Data uploading... The screen will turn grey when all data are uploaded.<br>When that happens, you may close the window and submit your code</p>',
     choices: jsPsych.NO_KEYS,
     trial_duration: 6000,
     data: {category: 'debreif_end'}
