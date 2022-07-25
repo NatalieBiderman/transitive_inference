@@ -1,0 +1,157 @@
+---
+title: "Analysis - Transitive Inference"
+author: "Natalie Biderman"
+date: "07/25/2022"
+output: html_document
+---
+
+### 1. Setup and Load data
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
+```
+
+```{r setup, message=FALSE}
+
+rm(list=ls(all=TRUE)) 
+
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+
+# If packages are not installed, install. Then, load libraries. 
+list_of_packages <- c("ggplot2", "Rmisc", "cowplot", "reshape2", "gridExtra", "arm", "mosaic", "stringr", "tidyr", "dplyr", "bayesplot", "rstanarm", "latex2exp", "kableExtra", "tibble")
+
+new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages)
+lapply(list_of_packages, require, character.only = TRUE)
+
+# Load functions
+source("Tools/create_csv_from_js_data.R")
+source("Tools/create_interactive_csv_from_js_data.R")
+source("Tools/preprocess_js_TI_data.R")
+source("Tools/plotting.R")
+
+# Figure parameters
+fig_size = c(10,10)
+fig_type = "svg"  # "eps" # or png
+n_sem <- 1
+Save_plots <- 1
+point_size <- 4.5
+point_stroke <- 0.6
+line_size <- 1
+color_pallete <- "Dark2"
+
+# Bayesian model params
+options(mc.cores = parallel::detectCores())
+params <- list()
+params$iterations <- 4000
+params$chains <- 4
+params$warmup <- 2000
+params$adapt_delta <- 0.99
+
+# Paths
+all_data_path = "Data/All_data";
+clean_data_path = "Data/Clean_data";
+
+# Do you want to run the models or load them?
+run_models = 0;
+
+# Do you want to preprocess data or load it? 
+preprocess_data = 1;
+
+# Load data 
+if (preprocess_data == 1){
+  data_path = all_data_path;
+  preprocess_js_TI_data(data_path="../Task/Data", summary_data_path = all_data_path)
+  df <- list(read.csv(paste0(data_path,"/df_TI.csv")),
+             read.csv(paste0(data_path,"/debreif.csv")),
+             read.csv(paste0(data_path,"/interaction.csv")),
+             read.csv(paste0(data_path,"/Raw_data/raw_data.csv")))
+  names(df) <- c("TI_data", "debreif", "interaction", "raw_data")
+}
+
+
+```
+
+### 2. Process MTurk  
+
+1. Find outlier subs
+2. Compute bonus money 
+
+```{r}
+
+# ==============================================================================
+# find outlier subs
+# ==============================================================================
+
+training_performance <- df$TI_data %>%
+  subset(phase == "training") %>%
+  group_by(PID) %>%
+  dplyr::summarize(training_performance = mean(accuracy, na.rm=1))
+
+warning_task <- df$raw_data %>% 
+  group_by(PID) %>%
+  dplyr::summarize(no_response = sum(ttype == "too_slow_prompt", na.rm=1), 
+                   missed_instruction_checkup = sum(missed_checkup, na.rm=1)) %>%
+  gather(no_response:missed_instruction_checkup, key="event", value="n") %>%
+  subset(n > 0) %>%
+  add_column(ttype = "", .after = "PID")
+
+warning_int_data <- df$interaction %>%
+  group_by(PID, ttype, event) %>%
+  summarize(n = n()) 
+
+all_warnings <- bind_rows(warning_task, warning_int_data) %>%
+  arrange(PID, event, ttype, n) 
+
+# combine all
+warning <- training_performance %>%
+  merge(all_warnings, by="PID")
+
+# assign outlier criteria 
+blur_focus_criterion = 10
+no_response_criterion = 20
+missed_instructions_criterion = 5
+training_criterion = 0.5
+
+warning <- warning %>%
+  mutate(outlier = ifelse(((event == "blur" | event == "focus") & n > blur_focus_criterion) | 
+                            (event == "no_response" & n > no_response_criterion) |
+                            (event == "missed_instructions_criterion" & n > missed_instructions_criterion) |
+                            (training_performance <= training_criterion), 1 ,0))
+
+outlier_subs <- as.numeric(unlist(unique(warning[warning$outlier==1, "PID"])))
+all_df <- df
+for (i in 1:length(df)){
+  df[[i]] <- df[[i]] %>% subset(!PID %in% outlier_subs)
+  write.csv(df[[i]], paste0(clean_data_path,"/",names(df)[i],".csv"))
+}
+
+# ==============================================================================
+# Compute bonus money
+# ==============================================================================
+
+final_tally <- df$raw_data %>% 
+  subset(!is.na(total_bonus_tally)) %>% 
+  dplyr::select(PID, total_bonus_tally)
+print(final_tally)
+write.csv(final_tally, "Data/Bonus/bonus.csv")
+
+# Create a bonus matrix so we could upload a csv of bonus money with worker IDs 
+# find workers that were not given bonus money yet
+bonus <- read.csv("../Task/Data/subs_log/subs_log.csv")  %>%
+  subset(ApprovalStatus=="Pending") %>%
+  mutate(PID = str_trim(`Actual.Completion.Code`)) %>%
+  dplyr::select(PID, AmazonIdentifier) %>%
+  merge(final_tally, by="PID") %>%
+  dplyr::select(AmazonIdentifier,total_bonus_tally)
+
+write.table(bonus_part2, "../Task/Data/Bonus/bonus_for_mturk.csv", sep=",",  col.names=FALSE, row.names=FALSE)
+
+```
+
+### 3. Initial analysis of data
+
+```{r}
+
+
+```

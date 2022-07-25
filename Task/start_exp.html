@@ -227,7 +227,7 @@ var fullscreen = {
       missed_checkup: 0,
       PID: subID }) // generate a random 5-char ID, because we can't save MTurk worker id.
   }, // function on_finish
-  data: {category: 'full_screen', start_time: timeStamp()}
+  data: {ttype: 'full_screen', start_time: timeStamp()}
 }
 timeline.push(fullscreen)
 
@@ -315,6 +315,8 @@ for (t = 0; t < ti_trials.length; t++){
     on_finish: function(data){
       if (data.key_press) {
         data.keypress_iti = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      } else {
+        data.keypress_iti = NaN;
       }
     }
   }
@@ -383,6 +385,8 @@ for (t = 0; t < ti_trials.length; t++){
     on_finish: function(data){
       if (data.key_press) {
         data.keypress_isi = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      } else {
+        data.keypress_isi = NaN;
       }
     }
   }
@@ -403,6 +407,8 @@ for (t = 0; t < ti_trials.length; t++){
     on_finish: function(data){
       if (data.key_press) {
         data.keypress_S2 = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press);
+      } else {
+        data.keypress_S2 = NaN;
       }
     }
   }
@@ -612,7 +618,7 @@ timeline.push(decisions_timeline);
   var debrief = [
     // intro
   { type: 'html-keyboard-response',
-    data: {category: 'debreif_intro'},
+    data: {ttype: 'debreif_intro'},
     stimulus: "You have completed the main part of the study. We will now ask you a few short questions."+
               "<br>Please answer them sincerely. We remind you that your answers are completely anonymous.</br>" +
               "<br>Please press the space bar to begin.</br>",
@@ -621,25 +627,25 @@ timeline.push(decisions_timeline);
     // age
   { type: 'survey-text',
     questions: [{prompt: 'How old are you?', columns: 20, rows: 1}],
-    data: {category: 'debreif_age'}},
+    data: {ttype: 'debreif_age'}},
     // gender
   { type: 'survey-multi-choice',
     questions: [{prompt: 'What is your gender?', options: ['Female','Male','Other'], required: true}],
-    data: {category: 'debreif_gender'}},
+    data: {ttype: 'debreif_gender'}},
     // dominant hand
   { type: 'survey-multi-choice',
     questions: [{prompt: 'What is your dominant hand?', options: ['Left','Right'], required: true}],
-    data: {category: 'debreif_dominant_hand'}},
+    data: {ttype: 'debreif_dominant_hand'}},
     // clarity of instructions and strategies
   { type: 'survey-text',
     questions: [{prompt: 'How did you decide which item to choose?', columns: 60, rows: 15}],
-    data: {category: 'debreif_choice_strategy'}},
+    data: {ttype: 'debreif_choice_strategy'}},
   { type: 'survey-multi-choice',
     questions: [{prompt: 'Which of the two images does the "D" key correspond to?', options: ['First image','Second image'], required: true}],
-    data: {category: 'debreif_keys'}},
+    data: {ttype: 'debreif_keys'}},
   { type: 'survey-text',
     questions: [{prompt: 'What strategy (if any) did you use to learn the task?', columns: 60, rows: 15}],
-    data: {category: 'debreif_learning_strategy'}},
+    data: {ttype: 'debreif_learning_strategy'}},
   /*{ type: 'jsPsychFreeSort',
     stimuli: TI_stimuli,
     stim_width: 70,
@@ -650,7 +656,7 @@ timeline.push(decisions_timeline);
     //data: {category: 'debreif_order_images'}},*/
   { type: 'survey-text',
     questions: [{prompt: 'Was there anything in the instructions you found unclear?',columns: 60, rows: 15}],
-    data: {category: 'debreif_clear_instructions'}},
+    data: {ttype: 'debreif_clear_instructions'}},
     // compute extra rewards given to subjects
   { type: "html-keyboard-response",
     stimulus: function() {
@@ -673,12 +679,12 @@ timeline.push(decisions_timeline);
              'Press the space bar to complete this experiment.</p>'
     },
     choices: [' '],
-    data: {category: 'final_tally'}},
+    data: {ttype: 'final_tally'}},
   { type: 'html-keyboard-response',
     stimulus: '<p>Data uploading... The screen will turn grey when all data are uploaded.<br>When that happens, you may close the window and submit your code</p>',
     choices: jsPsych.NO_KEYS,
     trial_duration: 6000,
-    data: {category: 'debreif_end'}
+    data: {ttype: 'debreif_end'}
   }];
 
   timeline = timeline.concat(debrief);
