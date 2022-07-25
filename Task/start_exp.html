@@ -174,8 +174,8 @@ for (t=0; t<trials.length; t++){
   ti_trials_tmp[t] = {block: block[t],
                       trial: NaN,
                       phase: trials[t][4],
-                      pair_type: trials[t][2],
-                      trial_type: trials[t][3],
+                      group_type: trials[t][2],
+                      pair_type: trials[t][3],
                       S1_stim: trials[t][0],
                       S2_stim: trials[t][1],
                       S1_img: trials[t][5],
@@ -427,8 +427,8 @@ for (t = 0; t < ti_trials.length; t++){
         trial.data.block = ti_trials[trial.data.index].block;
         trial.data.trial_num = ti_trials[trial.data.index].trial;
         trial.data.phase = ti_trials[trial.data.index].phase;
+        trial.data.group_type = ti_trials[trial.data.index].group_type;
         trial.data.pair_type = ti_trials[trial.data.index].pair_type;
-        trial.data.trial_type = ti_trials[trial.data.index].trial_type;
         trial.data.S1_stim = ti_trials[trial.data.index].S1_stim;
         trial.data.S2_stim = ti_trials[trial.data.index].S2_stim;
         trial.data.S1_img = ti_trials[trial.data.index].S1_img;

@@ -63,18 +63,18 @@ preprocess_js_TI_data <- function(data_path,summary_data_path){
   
   # get debreif questions 
   raw_debreif <- raw_df %>%
-    subset(grepl("debreif", category)) %>% 
+    subset(grepl("debreif", ttype)) %>% 
     dplyr::select(c("PID", "ttype", "responses"))
   
-  # debreif <- raw_debreif %>%
-  #   mutate(responses = gsub("[[:space:]]", " ",str_remove(gsub("[[:punct:]]", "", responses),"Q0"))) %>%
-  #   mutate(new_ttype = str_remove(as.character(ttype),"debreif_")) %>%
-  #   dplyr::select(-ttype) %>%
-  #   spread(new_ttype, responses) %>%
-  #   dplyr::select(-c("end", "intro"))
+  debreif <- raw_debreif %>%
+    mutate(responses = gsub("[[:space:]]", " ",str_remove(gsub("[[:punct:]]", "", responses),"Q0"))) %>%
+    mutate(new_ttype = str_remove(as.character(ttype),"debreif_")) %>%
+    dplyr::select(-ttype) %>%
+    spread(new_ttype, responses) %>%
+    dplyr::select(-c("end", "intro"))
   
-  #write.csv(debreif, file = sprintf("%s/debreif.csv",summary_data_path))
-  write.csv(raw_debreif, file = sprintf("%s/debreif.csv",summary_data_path))
+  write.csv(debreif, file = sprintf("%s/debreif.csv",summary_data_path))
+  #write.csv(raw_debreif, file = sprintf("%s/debreif.csv",summary_data_path))
   
   # ----------------------------------------------------------------------------
   # Create interactive data frame

@@ -134,7 +134,7 @@ final_tally <- df$raw_data %>%
   subset(!is.na(total_bonus_tally)) %>% 
   dplyr::select(PID, total_bonus_tally)
 print(final_tally)
-write.csv(final_tally, "Data/Bonus/bonus.csv")
+write.csv(final_tally, "../Task/Data/Bonus/bonus.csv")
 
 # Create a bonus matrix so we could upload a csv of bonus money with worker IDs 
 # find workers that were not given bonus money yet
@@ -153,5 +153,5 @@ write.table(bonus_part2, "../Task/Data/Bonus/bonus_for_mturk.csv", sep=",",  col
 
 ```{r}
 
-
+# בםצפואק 
 ```
