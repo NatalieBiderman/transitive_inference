@@ -13,6 +13,7 @@
     <script src="jspsych-6.0.5/plugins/jspsych-html-slider-response.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-fullscreen.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-html-button-response.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-free-sort@1.0.1"></script>
     <link href="jspsych-6.0.5/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     <link href="Tools/myCSSstyle.css" rel="stylesheet" type="text/css"></link>
     <style>
@@ -603,7 +604,7 @@ if (is_self_initiation == 1){
 
 } // end trials
 
-timeline.push(decisions_timeline);
+//timeline.push(decisions_timeline);
 
 // ============================= End experiment =============================
 
@@ -632,7 +633,21 @@ timeline.push(decisions_timeline);
     // clarity of instructions and strategies
   { type: 'survey-text',
     questions: [{prompt: 'How did you decide which item to choose?', columns: 60, rows: 15}],
-    data: {category: 'debreif_strategy'}},
+    data: {category: 'debreif_choice_strategy'}},
+  { type: 'survey-multi-choice',
+    questions: [{prompt: 'Which of the two images does the "D" key correspond to?', options: ['First image','Second image'], required: true}],
+    data: {category: 'debreif_keys'}},
+  { type: 'survey-text',
+    questions: [{prompt: 'What strategy (if any) did you use to learn the task?', columns: 60, rows: 15}],
+    data: {category: 'debreif_learning_strategy'}},
+  { type: 'jsPsychFreeSort',
+    stimuli: TI_stimuli,
+    stim_width: 70,
+    stim_height: 70,
+    sort_area_width: 500,
+    sort_area_height: 500,
+    prompt: "<p>Click and drag the images below to put them in order. If you are not sure, please guess.</p>"},
+    //data: {category: 'debreif_order_images'}},
   { type: 'survey-text',
     questions: [{prompt: 'Was there anything in the instructions you found unclear?',columns: 60, rows: 15}],
     data: {category: 'debreif_clear_instructions'}},
