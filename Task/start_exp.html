@@ -53,7 +53,7 @@ task_images = TI_stimuli.concat(Instructions_stimuli).concat(Extra_stims);
 // PARAMETERS
 // =============================================================================
 
-var is_debug                       = 0;
+var is_debug                       = 1;
 var is_server                      = 1;
 var n_reps_per_trial_type_training = 10;
 var n_reps_per_trial_type_test     = 6; // 6 or 7
@@ -81,8 +81,8 @@ var is_keys_instructions           = 0; // do we want to explicitly instruct sub
 var stim_path                      = "Stimuli/Fractals_stims";
 
 if (is_debug==1){
-  n_reps_per_trial_type_training = 2;
-  n_reps_per_trial_type_test = 2;
+  n_reps_per_trial_type_training = 3;
+  n_reps_per_trial_type_test = 3;
   timing_ISI = 100;
   timing_max_response = 500;
   timing_feedback = 100;
