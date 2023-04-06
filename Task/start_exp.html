@@ -10,6 +10,7 @@
     <script src="jspsych-6.0.5/plugins/jspsych-survey-text.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-survey-likert.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="jspsych-6.0.5/plugins/jspsych-survey-multi-select.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-html-slider-response.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-fullscreen.js"></script>
     <script src="jspsych-6.0.5/plugins/jspsych-html-button-response.js"></script>
@@ -762,18 +763,6 @@ timeline.push(decisions_timeline);
               "<br>Please press the space bar to begin.</br>",
     choices: keys_start_exp,
     response_ends_trial: true},
-    // age
-  { type: 'survey-text',
-    questions: [{prompt: 'How old are you?', columns: 20, rows: 1}],
-    data: {ttype: 'debreif_age'}},
-    // gender
-  { type: 'survey-multi-choice',
-    questions: [{prompt: 'What is your gender?', options: ['Female','Male','Other'], required: true}],
-    data: {ttype: 'debreif_gender'}},
-    // dominant hand
-  { type: 'survey-multi-choice',
-    questions: [{prompt: 'What is your dominant hand?', options: ['Left','Right'], required: true}],
-    data: {ttype: 'debreif_dominant_hand'}},
     // clarity of instructions and strategies
   { type: 'survey-text',
     questions: [{prompt: 'How did you decide which item to choose?', columns: 60, rows: 15}],
@@ -784,17 +773,27 @@ timeline.push(decisions_timeline);
   { type: 'survey-text',
     questions: [{prompt: 'What strategy (if any) did you use to learn the task?', columns: 60, rows: 15}],
     data: {ttype: 'debreif_learning_strategy'}},
-  /*{ type: 'jsPsychFreeSort',
-    stimuli: TI_stimuli,
-    stim_width: 70,
-    stim_height: 70,
-    sort_area_width: 500,
-    sort_area_height: 500,
-    prompt: "<p>Click and drag the images below to put them in order. If you are not sure, please guess.</p>"},
-    //data: {category: 'debreif_order_images'}},*/
   { type: 'survey-text',
     questions: [{prompt: 'Was there anything in the instructions you found unclear?',columns: 60, rows: 15}],
     data: {ttype: 'debreif_clear_instructions'}},
+    // age
+  { type: 'survey-text',
+    questions: [{prompt: 'How old are you?', columns: 20, rows: 1}],
+    data: {ttype: 'debreif_age'}},
+    // gender
+  { type: 'survey-multi-choice',
+    questions: [{prompt: 'What is your gender?', options: ['Female','Male','Other'], required: true}],
+    data: {ttype: 'debreif_gender'}},
+  { type: 'survey-multi-choice',
+      questions: [{prompt: 'What is your ethnicity?', options: ['Hispanic or Latino','Not Hispanic or Latino'], required: true}],
+      data: {ttype: 'debreif_ethnicity'}},
+  { type: 'survey-multi-select',
+      questions: [{prompt: 'How would you define your race?', options: ['American Indian or Alaska Native','Asian', 'Black or African American', 'Hispanic or Latino', 'Native Hawaiian or Other Pacific Islander', 'White', 'Decline to answer'], required: true}],
+      data: {ttype: 'debreif_ethnicity'}},
+    // dominant hand
+  { type: 'survey-multi-choice',
+    questions: [{prompt: 'What is your dominant hand?', options: ['Left','Right'], required: true}],
+    data: {ttype: 'debreif_dominant_hand'}},
     // compute extra rewards given to subjects
   { type: "html-keyboard-response",
     stimulus: function() {
