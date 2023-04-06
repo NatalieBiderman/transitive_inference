@@ -73,9 +73,9 @@ var end_node                       = 7; // how many letters we are covering
 var n_blocks_training              = 3;
 var n_blocks_test                  = n_reps_per_trial_type_test; // we keep number of blocks similar to number of trial types, so each block will present all trial types in a randomized order
 var n_total_blocks                 = n_blocks_training + n_blocks_test;
-var timing_S1                      = 250;
+var timing_S1                      = 150; // 250; // V7 - 150ms, all previous versions are 250ms.
 var timing_S2                      = timing_S1;
-var timing_ISI                     = 150; // V4 includes 500 ms, V5 = 1000, V6 = 150, all other versions are 2000;
+var timing_ISI                     = 2000; // V4 includes 500 ms, V5 = 1000, V6 = 150, all other versions are 2000;
 var timing_max_response            = 2000;
 var timing_feedback                = 1000;
 var timing_too_slow                = 1000;
